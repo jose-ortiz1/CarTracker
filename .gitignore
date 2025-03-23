@@ -1,0 +1,13 @@
+# Ignore node_modules and build files
+CarTracker/node_modules/
+CarTracker/dist/
+
+CarTrackerBackend/node_modules/
+CarTrackerBackend/uploads/
+
+# Ignore environment files
+CarTracker/.env
+CarTrackerBackend/.env
+
+# Ignore logs
+*.log
