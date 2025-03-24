@@ -1,0 +1,108 @@
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="card shadow-lg p-4 rounded position-relative" style="width:700px;">
+  
+      <!-- Close button -->
+      <button class="btn btn-close position-absolute top-0 end-0 m-3" (click)="close()"></button>
+  
+      <!-- Title -->
+      <div class="text-center mb-3">
+        <h5 class="bg-light rounded-pill py-2 fw-bold">Vehicle Information</h5>
+      </div>
+  
+      <!-- Form -->
+      <form (ngSubmit)="submitVehicle()" #vehicleForm="ngForm">
+        <div class="row align-items-start">
+  
+          <!-- Left Section (Photo and basic data) -->
+          <div class="col-md-6">
+            <div class="text-center">
+  <ng-container *ngIf="!imagePreviewUrl; else previewImage">
+    <label for="photo-upload" class="form-label">+ Add photo (optional)</label>
+    <input type="file" class="form-control form-control-sm mx-auto" style="max-width:300px" id="photo-upload" (change)="onFileSelected($event)">
+  </ng-container>
+
+  <ng-template #previewImage>
+    <img [src]="imagePreviewUrl" alt="Vehicle Preview" class="img-thumbnail mb-2" style="width:250px;height:auto;">
+    <br>
+    <button class="btn btn-danger btn-sm" (click)="removeSelectedImage()">Remove Image</button>
+  </ng-template>
+</div>
+  
+            <div class="mb-3">
+              <label class="form-label">Make</label>
+              <input class="form-control" [(ngModel)]="vehicle.make" name="make" required>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Model</label>
+              <input class="form-control" [(ngModel)]="vehicle.model" name="model" required>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Transmission</label>
+              <input class="form-control" [(ngModel)]="vehicle.transmission" name="drive_train">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Engine</label>
+                <input class="form-control" [(ngModel)]="vehicle.engine" name="engine">
+              </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Odometer (Km)</label>
+              <input type="number" class="form-control" [(ngModel)]="vehicle.mileage" name="odometer">
+            </div>
+
+           
+  
+          </div>
+  
+          <!-- Right Section (Vehicle details) -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Vehicle Nickname (optional)</label>
+              <input class="form-control" [(ngModel)]="vehicle.nickname" name="nickname">
+            </div>
+  
+            <div class="mb-4">
+              <label class="form-label">VIN Number *</label>
+              <input class="form-control" [(ngModel)]="vehicle.vin_number" name="vin_number" required>
+            </div>
+  
+            <div class="mb-3">
+              <button class="btn btn-primary btn-sm" type="button">
+                VIN Lookup
+              </button>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Year</label>
+              <input type="number" class="form-control" [(ngModel)]="vehicle.year" name="year" required>
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Fuel Type</label>
+              <input class="form-control" [(ngModel)]="vehicle.fuel_type" name="fuel_type">
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Trim</label>
+              <input class="form-control" [(ngModel)]="vehicle.trim" name="trim">
+            </div>
+  
+            <div class="mb-3">
+              <label class="form-label">Purchase Date</label>
+              <input type="date" class="form-control" [(ngModel)]="vehicle.purchase_date" name="purchase_date">
+            </div>
+          </div>
+  
+        </div>
+  
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+          <button class="btn btn-primary px-5" [disabled]="vehicleForm.invalid">Save</button>
+        </div>
+  
+      </form>
+    </div>
+  </div>

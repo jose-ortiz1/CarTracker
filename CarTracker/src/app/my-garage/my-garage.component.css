@@ -1,0 +1,60 @@
+.vehicle-card {
+    width: 100px;
+    height: 130px;
+    text-align: center;
+    padding: 4px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .vehicle-card:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .vehicle-card.selected {
+    background-color: gray;
+    color: white;
+  }
+  
+  .vehicle-img {
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .vehicle-img-lg {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .vehicle-info {
+    margin-top: 40px;
+    border-radius: 12px;
+    background-color: #eaeaea;
+    position: relative;
+    margin-bottom: 50px;
+  }
+  .content-area {
+    margin-left: 230px; /* Push main content to the right */
+    width: calc(100% - 250px); /* Adjust width to prevent overlap */
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.vehicle-card-button{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: rgb(red, green, rgb(8, 8, 255));
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .color-background{
+    background-color: #eaeaea;
+  }

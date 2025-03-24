@@ -1,0 +1,91 @@
+<div class="d-flex">
+  <!-- Main Content Area -->
+  <div class="container content-area">
+      <div class="row">
+          <div class="col">
+              <!-- My Garage Section -->
+              <div class="card shadow-sm p-4 mb-4 rounded color-sidebar">
+                  <h4 class="mb-3">My Garage</h4>
+                  <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                          <div *ngFor="let vehicle of vehicles" class="vehicle-box text-center mx-2">
+                              <img [src]="'http://localhost:3000/uploads/' + vehicle.photo_url" class="vehicle-img" alt="{{ vehicle.make }}">
+                              <p>{{ vehicle.nickname || vehicle.make + ' ' + vehicle.model + ' ' + vehicle.year }}</p>
+                          </div>
+                          <button class="btn btn-primary ms-3" [routerLink]="['/add-vehicle']">
+                              <i class="bi bi-plus-circle"></i> + Add New Vehicle
+                          </button>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Upcoming Maintenance Section -->
+              <div class="card shadow-sm p-4 mb-4 rounded color-sidebar">
+                  <div class="d-flex justify-content-between align-items-center">
+                      <h4 class="fw-bold">Upcoming Maintenance</h4>
+                      <select class="form-select w-auto" [(ngModel)]="selectedVehicleId" (change)="onVehicleChange()">
+                          <option *ngFor="let vehicle of vehicles" [value]="vehicle.vehicle_id">
+                              {{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}
+                          </option>
+                      </select>
+                      
+                  </div>
+
+                  <!-- Maintenance Items -->
+                  <div class="d-flex mt-3 " >
+                      <div *ngFor="let reminder of reminders" class="maintenance-box text-center m-2">
+                          <div class="progress-circle" [ngClass]="getStatusClass(reminder.status)">
+                            <img [src]="reminder.icon_url" class="maintenance-icon" alt="{{ reminder.reminder_type }}">
+                          </div>
+                          <p class="fw-bold mt-2">{{ reminder.service_type || 'Service Type'}}</p>
+                          <p class="small text-muted">Due: {{ reminder.due_date || reminder.due_mileage + ' km' }}</p>
+                      </div>
+                      <div class="w-100 d-flex p-4">
+                        <button class="btn btn-primary align-self-center" [routerLink]="['/reminders']">
+                            <i class="bi bi-plus-circle"></i> + View More
+                        </button>
+                    </div>
+                  </div>
+              </div>
+
+              <!-- Recent Service Logs Section -->
+              <div class="card shadow-sm p-4 mb-4 rounded color-sidebar">
+                  <div class="d-flex justify-content-between">
+                      <h4>Recent Service Logs</h4>
+                      <select class="form-select w-auto" [(ngModel)]="selectedVehicleId" (change)="fetchServiceLogs()">
+                          <option *ngFor="let vehicle of vehicles" [value]="vehicle.vehicle_id">
+                              {{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}
+                          </option>
+                      </select>
+                  </div>
+                  <table class="table mt-3">
+                      <thead class="table-light">
+                          <tr>
+                              <th>Service Type</th>
+                              <th>Date</th>
+                              <th>Mileage</th>
+                              <th>Service Provider</th>
+                              <th>Cost</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let service of serviceLogs">
+                              <td><img [src]="service.icon_url" class="service-icon">{{ service.service_type }}</td>
+                              <td>{{ service.service_date }}</td>
+                              <td>{{ service.mileage }} km</td>
+                              <td>{{ service.provider }}</td>
+                              <td> ${{ service.cost }}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <button class="btn btn-primary ms-3" [routerLink]="['/services']">
+                    <i class="bi bi-plus-circle"></i> + View More
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
