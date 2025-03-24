@@ -1,0 +1,110 @@
+<div class="container mt-4 content-area">
+  
+    <!-- Section Title -->
+    <h2 class="text-center">My Garage</h2>
+  
+    <!-- Vehicle Selection -->
+    <div class="d-flex justify-content-center my-2 shadow-sm p-4 mb-4 rounded color-background">
+      <div *ngFor="let vehicle of vehicles" class="vehicle-card mx-3"
+           [class.selected]="vehicle.vehicle_id === selectedVehicle?.vehicle_id"
+           (click)="selectVehicle(vehicle)">
+        <img [src]="'http://localhost:3000/uploads/' + vehicle.photo_url" class="vehicle-img">
+        <p>{{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}</p>
+      </div>
+      <div>
+        <button class="btn btn-primary vehicle-card-button" [routerLink]="['/add-vehicle']">
+            <i class="bi bi-plus-circle"></i> + Add New Vehicle
+          </button>
+      </div>
+    </div>
+  
+    <!-- Vehicle Information Section -->
+    <div class="card shadow p-4 vehicle-info">
+      
+      <!-- Delete Button -->
+      <button class="btn btn-danger btn-sm position-absolute top-0 start-0 m-3"
+              (click)="deleteVehicle(selectedVehicle.vehicle_id)">
+        <i class="bi bi-trash"></i> Delete
+      </button>
+  
+      <h4 class="text-center fw-bold">Vehicle Information</h4>
+  
+      <div class="row align-items-center">
+        
+        <!-- Vehicle Image -->
+        <div class="col-md-4 text-center">
+          <img [src]="'http://localhost:3000/uploads/' + selectedVehicle?.photo_url" class="vehicle-img-lg" alt="Vehicle image">
+        </div>
+  
+        <!-- Vehicle Details -->
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-sm-6">
+              <p><strong>Make</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.make">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.make || '-' }} </span>
+              </p> 
+              <p><strong>Model</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.model">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.model || '-' }} </span>
+            </p>
+              <p><strong>Year</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.year">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.year || '-' }} </span>
+            </p>
+              <p><strong>Fuel Type</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.fuel_type">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.fuel_type || '-' }} </span>
+            </p>
+              <p><strong>Engine</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.engine">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.engine || '-' }} </span>
+            </p>
+              <p><strong>Odometer (Km)</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.mileage">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.mileage || '-' }} </span>
+            </p>
+            </div>
+            <div class="col-sm-6">
+              <p><strong>Vehicle Nickname</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.nickname">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.nickname || '-' }} </span>
+            </p>
+              <p><strong>VIN Number</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.vin_number">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.vin_number || '-' }} </span>
+            </p>
+              <p><strong>Trim</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.trim">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.trim || '-' }} </span>
+            </p>
+              <p><strong>Fuel Type</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.fuel_type">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.fuel_type || '-' }} </span>
+            </p>
+              <p><strong>Transmission</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.transmission">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.transmission || '-' }} </span>
+            </p>
+              <p><strong>Purchase Date</strong><br>
+                <input *ngIf="isEditing" type="text" class="form-control" [(ngModel)]="selectedVehicle.purchase_date">
+                <span *ngIf="!isEditing"> {{ selectedVehicle?.purchase_date || '-' }} </span>
+            </p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Action Buttons -->
+      <div class="text-end mt-3">
+        <button class="btn btn-primary mx-2" (click)="editVehicle()">
+          <i class="bi bi-pencil-square"></i> {{ isEditing ? 'Cancel' : 'Edit' }}
+        </button>
+        <button class="btn btn-success" (click)="saveChanges()">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+  
+    </div>
+  
+  </div>

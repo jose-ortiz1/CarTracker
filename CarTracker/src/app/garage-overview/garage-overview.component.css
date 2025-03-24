@@ -1,0 +1,73 @@
+
+/* Main Content */
+.content-area {
+  margin-left: 230px;
+  width: calc(100% - 250px);
+  padding: 40px;
+  
+}
+
+/* Vehicles */
+.vehicle-box {
+  text-align: center;
+}
+
+.vehicle-img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+/* Maintenance Section */
+.maintenance-box {
+  width: 140px;
+  padding: 2px;
+  border-radius: 10px;
+  background-color: #eaeaea;
+  
+}
+
+.maintenance-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 5px;
+}
+
+/* Status Indicators */
+.progress-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border: 5px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Colors */
+.progress-circle.overdue {
+  border-color: red;
+}
+
+.progress-circle.due-soon {
+  border-color: orange;
+}
+
+.progress-circle.upcoming {
+  border-color: green;
+}
+
+.color-sidebar{
+  background-color: #eaeaea;
+}
+
+.service-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+
+}

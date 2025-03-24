@@ -1,0 +1,79 @@
+<div class="container content-area card shadow-sm p-4 mb-4 rounded">
+    
+    <!-- Vehicle Selection -->
+    <div class="d-flex justify-content-between align-items-center">
+      <select class="form-select w-auto" [(ngModel)]="selectedVehicle" (change)="fetchServices()">
+        <option *ngFor="let vehicle of vehicles" [ngValue]="vehicle">{{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}</option>
+      </select>
+      <span class="fw-bold text-muted mx-3">Current Odometer: {{ currentMileage }} Km</span>
+      <button class="btn btn-primary" (click)="openServiceModal()">+ Add Service</button>
+    </div>
+
+    <!-- Service History Table -->
+    <table class="table mt-3">
+      <thead class="table-light">
+        <tr>
+          <th>Service Type</th>
+          <th>Date</th>
+          <th>Mileage (Km)</th>
+          <th>Service Provider</th>
+          <th>Cost</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let service of serviceRecords">
+          <td><img [src]="service.icon_url" class="service-icon"> {{ service.service_type }}</td>
+          <td>{{ service.service_date }}</td>
+          <td>{{ service.mileage }}</td>
+          <td>{{ service.provider }}</td>
+          <td>${{ service.cost }}</td>
+          <td>
+            <button class="btn btn-info btn-sm"><i class="bi bi-search"></i>View</button>
+            <button class="btn btn-warning btn-sm" (click)="editService(service)"><i class="bi bi-pencil"></i>Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteService(service.service_id)"><i class="bi bi-trash"></i>Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<!-- Service Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedService ? 'Edit Service' : 'New Service' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label class="form-label">Service Type</label>
+          <select class="form-select" [(ngModel)]="serviceData.service_type_id" name="serviceType">
+            <option *ngFor="let service of availableServices" [ngValue]="service.service_type_id">{{service.service_type}}</option>
+          </select>
+
+          <label class="form-label mt-3">Mileage (Km)</label>
+          <span class="fw-bold text-muted mx-3">Current Odometer: {{ currentMileage }} Km</span>
+          <input type="number" class="form-control" [(ngModel)]="serviceData.mileage" name="mileage">
+
+          <label class="form-label mt-3">Service Date</label>
+          <input type="date" class="form-control" [(ngModel)]="serviceData.service_date" name="serviceDate">
+
+          <label class="form-label mt-3">Service Provider</label>
+          <input type="text" class="form-control" [(ngModel)]="serviceData.provider" name="provider">
+
+          <label class="form-label mt-3">Cost ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="serviceData.cost" name="cost">
+
+          <label class="form-label mt-3">Notes</label>
+          <input type="text" class="form-control" [(ngModel)]="serviceData.notes" name="notes">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="saveService()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

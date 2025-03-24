@@ -1,0 +1,92 @@
+.sidebar {
+    position: fixed; /* Keeps sidebar fixed */
+    left: 0; /* Keep it at the left edge */
+    top: 50%; /* Centers vertically */
+    transform: translateY(-50%);
+    width: 220px; /* Adjust sidebar width */
+    height: auto; /* Dynamic height */
+    background-color: #eaeaea;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it stays above content */
+}
+
+
+.nav-link {
+    font-size: 1.2rem;
+    color: #333;
+    padding: 10px;
+    display: block;
+  }
+  
+  .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 10px;
+  }
+  
+  .nav-link i {
+    margin-right: 8px;
+  }
+
+  .icon {
+    width: 50px;
+  }
+
+  .vehicle-box {
+    text-align: center;
+  }
+  
+  .vehicle-img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .maintenance-box {
+    width: 120px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f8f9fa;
+  }
+  
+  .maintenance-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+  }
+  
+  .service-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  .nav-link {
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+  
+  .nav-link:hover {
+    background-color: #e9ecef;
+  }
+  
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  .content-area {
+    margin-left: 230px; /* Push main content to the right */
+    width: calc(100% - 250px); /* Adjust width to prevent overlap */
+    padding: 40px;
+}

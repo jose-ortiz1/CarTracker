@@ -1,0 +1,15 @@
+.content-area {
+    background-color: #eaeaea;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    margin-left: 240px; /* Push main content to the right */
+    width: calc(100% - 250px); /* Adjust width to prevent overlap */
+    padding: 40px;
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}

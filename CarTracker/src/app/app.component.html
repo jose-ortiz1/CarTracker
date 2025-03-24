@@ -1,0 +1,68 @@
+
+    <!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid p-1">
+      <div>
+        <a class="text-light me-3" [routerLink]="['/garage-overview']">Home</a>
+        <a class="text-light mx-2" [routerLink]="['/signin']">Sign-In</a>
+        <a class="text-light" [routerLink]="['/signup']">Sign-Up</a>
+      </div>
+  
+      <a class="navbar-brand">{{pageTitle}}</a>
+  
+      <div class="text-light d-flex align-items-center gap-2">
+        <i class="bi bi-person-circle"></i>
+        {{ currentUser?.name}}
+        <button class="btn btn-sm btn-outline-danger" (click)="logout()">Logout</button>
+      </div>
+    </div>
+</nav>
+
+
+<!-- Sidebar -->
+<div *ngIf="showSidebar">
+    <div class="d-flex">
+        <div class="sidebar card shadow-sm p-4 mb-4 rounded">
+            <ul class="nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/garage-overview']">
+                        <img src="https://static.thenounproject.com/png/4464299-512.png" alt="overview" class="icon">Overview
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/my-garage']">
+                        <img src="https://static.thenounproject.com/png/789299-200.png" alt="garage" class="icon"> Garage
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/odometer']">
+                        <img src="https://static.thenounproject.com/png/6686260-512.png" alt="odometer" class="icon"> Odometer
+                    </a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/reminders']">
+                        <img src="https://static.thenounproject.com/png/7090948-512.png" alt="reminder" class="icon"> Reminder
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/services']">
+                        <img src="https://static.thenounproject.com/png/7160017-512.png" alt="service" class="icon"> Service
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    
+     </div>
+
+</div>
+ 
+
+
+<!-- <app-garage-overview></app-garage-overview> -->
+
+<router-outlet />
+
+
+
+
