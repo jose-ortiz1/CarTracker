@@ -285,7 +285,8 @@ app.delete('/api/service_history/:service_id', async (req, res) => {
 app.get('/api/reminders', async (req, res) => {
     const user_id = req.params.user_id;
     try{
-        const [data] = await connection.promise().query(`SELECT * 
+        const [data] = await connection.promise().query(`
+            SELECT * 
             FROM car_tracker.reminders
             WHERE user_id =? `, user_id
         );
@@ -301,10 +302,11 @@ app.get('/api/reminders/:vehicle_id', async (req, res) => {
     const vehicle_id = req.params.vehicle_id;
     try{
         const [data] = await connection.promise().query(`
-            SELECT r.reminder_id, r.vehicle_id, r.due_date, r.due_mileage, r.status, r.recurring, 
+            SELECT r.reminder_id, r.vehicle_id, r.due_date, r.due_mileage, r.status, r.recurring, r.repeat_interval, r.service_type_id, 
                    st.service_type, st.icon_url 
             FROM car_tracker.reminders r
-            LEFT JOIN car_tracker.service_types st ON r.service_type_id = st.service_type_id
+            LEFT JOIN car_tracker.service_types st 
+                ON r.service_type_id = st.service_type_id
             WHERE r.vehicle_id = ? 
             ORDER BY r.due_date ASC`, [vehicle_id]
         );
@@ -319,14 +321,15 @@ app.get('/api/reminders/:vehicle_id', async (req, res) => {
 //ADD NEW REMINDER
 
 app.post('/api/reminders/', async (req, res) => {
-    const {vehicle_id, service_type_id, due_date, due_mileage, recurring, repeat_interval } = req.body;
+    const {vehicle_id, service_type_id, due_date, due_mileage, status, recurring, repeat_interval } = req.body;
 
     try{
+        const safeRepeatInterval = repeat_interval === '' ? null : repeat_interval;
         const [data] = await connection.promise().query(
             `INSERT INTO car_tracker.reminders 
-            (vehicle_id, service_type_id, due_date, due_mileage, recurring, repeat_interval)
-            VALUES (?,?,?,?,?,?)`,
-            [vehicle_id, service_type_id, due_date && due_date !== '' ? due_date : null, due_mileage || null, recurring || null, repeat_interval || null]
+            (vehicle_id, service_type_id, due_date, due_mileage, status,recurring, repeat_interval)
+            VALUES (?,?,?,?,?,?,?)`,
+            [vehicle_id, service_type_id, due_date && due_date !== '' ? due_date : null, due_mileage || null, status || null, recurring || null, safeRepeatInterval]
         );
         return res.json({ message: 'Reminder added successfully', id: data.insertId });
 
@@ -339,7 +342,7 @@ app.post('/api/reminders/', async (req, res) => {
 //UPDATE A REMINDER
 app.put('/api/reminders/:reminder_id', async (req, res) => {
     const reminder_id = req.params.reminder_id;
-    let {vehicle_id, service_type_id, due_date, due_mileage, recurring, repeat_interval } = req.body;
+    let {vehicle_id, service_type_id, due_date, due_mileage, status, recurring, repeat_interval } = req.body;
     
     console.log("Updating reminder with ID:", reminder_id);
     console.log("Request body:", req.body);
@@ -349,12 +352,12 @@ app.put('/api/reminders/:reminder_id', async (req, res) => {
     }
 
     try {
-        // due_date = formatDate(due_date);
+        const safeRepeatInterval = repeat_interval === '' ? null : repeat_interval;
         const [data] = await connection.promise().query(
             `UPDATE car_tracker.reminders 
-            SET vehicle_id = ?, service_type_id = ?, due_date = ?, due_mileage = ?, recurring = ?, repeat_interval = ? 
+            SET vehicle_id = ?, service_type_id = ?, due_date = ?, due_mileage = ?, status = ?, recurring = ?, repeat_interval = ? 
             WHERE reminder_id = ?`,
-            [ vehicle_id, service_type_id, due_date, due_mileage, recurring, repeat_interval, reminder_id]
+            [ vehicle_id, service_type_id, due_date, due_mileage, status,recurring, safeRepeatInterval, reminder_id]
         );
         console.log("Update successful:", data);
         res.json({ message: 'Reminder updated successfully' });

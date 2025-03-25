@@ -27,7 +27,8 @@ export class RemindersComponent implements OnInit{
     due_date: '',
     due_mileage: null,
     recurring: false,
-    repeat_interval: ''
+    repeat_interval: '',
+    status: ''
   };
   
 
@@ -72,7 +73,25 @@ export class RemindersComponent implements OnInit{
   }
 
   editReminder(reminder: any){
-    this.openReminderModal(reminder);
+
+    this.selectedReminder = { ...reminder};
+    this.reminderData = {
+      vehicle_id: this.selectedVehicle.vehicle_id,
+      service_type_id: reminder?.service_type_id || '',
+      due_date: reminder?.due_date ? this.formatDate(reminder.due_date) : '',
+      due_mileage: reminder?.due_mileage || null,
+      recurring: reminder?.recurring || false,
+      repeat_interval: reminder?.repeat_interval || '',
+      status: reminder?.status || null
+    };
+    console.log(this.reminderData);
+
+    this.currentMileage = this.selectedVehicle?.mileage || 0;
+
+    const modalElement = document.getElementById('reminderModal');
+    this.modalInstance = new bootstrap.Modal(modalElement!);
+    this.modalInstance.show();
+    
   }
 
   deleteReminder(reminder_id: number) {
@@ -86,9 +105,10 @@ export class RemindersComponent implements OnInit{
 
   this.reminderData = {
     vehicle_id: this.selectedVehicle.vehicle_id,
-    service_type_id: reminder?.service_type_id || '',  // Ensure service type is selected
+    service_type_id: reminder?.service_type_id || '', 
     due_date: reminder?.due_date ? this.formatDate(reminder.due_date) : '',  // Format date properly
     due_mileage: reminder?.due_mileage || null,
+    status: reminder?.status || null,
     recurring: reminder?.recurring || false,
     repeat_interval: reminder?.repeat_interval || ''
   };
@@ -102,7 +122,10 @@ export class RemindersComponent implements OnInit{
   saveReminder() {
     if (this.reminderData.due_date) {
       this.reminderData.due_date = this.reminderData.due_date;
+      const status = this.calculateStatus(this.reminderData.due_date);
+      this.reminderData.status = status;
     }
+
     if (this.selectedReminder) {
       this.carTrackerService.updateReminder(this.selectedReminder.reminder_id, this.reminderData)
         .subscribe(() => {
@@ -115,6 +138,23 @@ export class RemindersComponent implements OnInit{
           this.fetchReminders();
           this.modalInstance.hide();
         });
+    }
+  }
+
+  calculateStatus(dueDateString: string): string {
+    const dueDate = new Date(dueDateString);
+    const now = new Date();
+  
+    const monthsDiff =
+      (dueDate.getFullYear() - now.getFullYear()) * 12 +
+      (dueDate.getMonth() - now.getMonth());
+  
+    if (monthsDiff < 1) {
+      return 'Overdue';
+    } else if (monthsDiff >= 1 && monthsDiff < 4) {
+      return 'Due Soon';
+    } else {
+      return 'Upcoming';
     }
   }
 
