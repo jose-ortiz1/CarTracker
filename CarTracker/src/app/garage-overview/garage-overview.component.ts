@@ -62,28 +62,53 @@ export class GarageOverviewComponent implements OnInit {
   fetchReminders() {
     if (!this.selectedVehicleId) return;
     this.carTrackerService.getRemindersByVehicle(this.selectedVehicleId)
-      .subscribe(reminders => {
-        this.reminders = reminders;
+    .subscribe(reminders => {
+      const now = new Date();
+
+      this.reminders = reminders.map((reminder:any) => {
+        const dueDate = new Date(reminder.due_date);
+        const monthsDiff =
+          (dueDate.getFullYear() - now.getFullYear()) * 12 +
+          (dueDate.getMonth() - now.getMonth());
+
+        if (monthsDiff < 1) {
+          reminder.status = 'Overdue';
+        } else if (monthsDiff >= 1 && monthsDiff < 4) {
+          reminder.status = 'Due Soon';
+        } else {
+          reminder.status = 'Upcoming';
+        }
+
+        return reminder;
       });
-  }
+    });
+}
 
   onVehicleChange() {
     this.fetchReminders();
     this.fetchServiceLogs();
   }
 
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'Overdue': return 'overdue';
-      case 'Due Soon': return 'due-soon';
-      case 'Upcoming': return 'upcoming';
-      default: return '';
-    }
+  
+  getRemainingMonths(dueDate: string): string {
+    if (!dueDate) return '';
+  
+    const now = new Date();
+    const due = new Date(dueDate);
+  
+    // Calculate year and month difference
+    let monthsDiff =
+      (due.getFullYear() - now.getFullYear()) * 12 +
+      (due.getMonth() - now.getMonth());
+  
+      const monthName = due.toLocaleString('default', { month: 'long' });
+
+      if (monthsDiff < 0) return `Overdue (${monthName})`;
+      if (monthsDiff === 0) return `Due this month (${monthName})`;
+    
+      return `Due in ${monthsDiff} month${monthsDiff > 1 ? 's' : ''} (${monthName})`;
   }
 
-  getReminderIcon(reminderType: string): string {
-    if (!reminderType) return 'assets/icons/default.png'; // Fallback icon
-    return `assets/icons/${reminderType.toLowerCase().replace(/\s+/g, '-')}.png`;
-  }
+  
 
 }

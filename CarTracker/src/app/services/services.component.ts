@@ -20,6 +20,7 @@ export class ServicesComponent implements OnInit{
   modalInstance: any;
   currentMileage: any;
   availableServices: any[] = [];
+  isReadOnly: boolean = false;
 
   serviceData = {
     vehicle_id: null,
@@ -76,11 +77,27 @@ export class ServicesComponent implements OnInit{
     });
   }
 
-  editService(service: any){
-    this.openServiceModal(service);
+  editService(service: any) {
+    this.isReadOnly = false;
+    this.selectedService = { ...service };
+    this.serviceData = {
+      vehicle_id: this.selectedVehicle.vehicle_id,
+      service_type_id: service.service_type_id,
+      service_date: this.formatDate(service.service_date),
+      mileage: service.mileage,
+      provider: service.provider,
+      cost: service.cost,
+      notes: service.notes,
+      receipt_url: service.receipt_url
+    };
+  
+    const modalElement = document.getElementById('serviceModal');
+    this.modalInstance = new bootstrap.Modal(modalElement!);
+    this.modalInstance.show();
   }
 
   openServiceModal(service: any = null) {
+    this.isReadOnly = false;
     this.selectedService = service;
 
     if (service) {
@@ -89,7 +106,7 @@ export class ServicesComponent implements OnInit{
       this.serviceData = {
         vehicle_id: this.selectedVehicle.vehicle_id,
         service_type_id: null,
-        service_date: '',
+        service_date: this.formatDate(service.service_date),
         mileage: null,
         provider: '',
         cost: null,
@@ -117,6 +134,26 @@ export class ServicesComponent implements OnInit{
           this.modalInstance.hide();
         });
     }
+  }
+
+  viewService(service: any) {
+    this.isReadOnly = true;
+    this.selectedService = { ...service };
+  
+    this.serviceData = {
+      vehicle_id: this.selectedVehicle.vehicle_id,
+      service_type_id: service.service_type_id,
+      service_date: this.formatDate(service.service_date),
+      mileage: service.mileage,
+      provider: service.provider,
+      cost: service.cost,
+      notes: service.notes,
+      receipt_url: service.receipt_url
+    };
+  
+    const modalElement = document.getElementById('serviceModal');
+    this.modalInstance = new bootstrap.Modal(modalElement!);
+    this.modalInstance.show();
   }
 
   formatDate(dateString: string): string {

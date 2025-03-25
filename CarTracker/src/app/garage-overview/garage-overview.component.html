@@ -34,11 +34,11 @@
                   <!-- Maintenance Items -->
                   <div class="d-flex mt-3 " >
                       <div *ngFor="let reminder of reminders" class="maintenance-box text-center m-2">
-                          <div class="progress-circle" [ngClass]="getStatusClass(reminder.status)">
+                          <div class="progress-circle" [ngClass]="reminder.status.toLowerCase().replace(' ', '-')">
                             <img [src]="reminder.icon_url" class="maintenance-icon" alt="{{ reminder.reminder_type }}">
                           </div>
                           <p class="fw-bold mt-2">{{ reminder.service_type || 'Service Type'}}</p>
-                          <p class="small text-muted">Due: {{ reminder.due_date || reminder.due_mileage + ' km' }}</p>
+                          <p class="small text-muted">Due: {{ getRemainingMonths(reminder.due_date) }}</p>
                       </div>
                       <div class="w-100 d-flex p-4">
                         <button class="btn btn-primary align-self-center" [routerLink]="['/reminders']">
@@ -71,7 +71,7 @@
                       <tbody>
                           <tr *ngFor="let service of serviceLogs">
                               <td><img [src]="service.icon_url" class="service-icon">{{ service.service_type }}</td>
-                              <td>{{ service.service_date }}</td>
+                              <td>{{ service.service_date | date:'yyyy-MM-dd'}}</td>
                               <td>{{ service.mileage }} km</td>
                               <td>{{ service.provider }}</td>
                               <td> ${{ service.cost }}</td>
