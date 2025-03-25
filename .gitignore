@@ -1,6 +1,7 @@
 # Ignore node_modules and build files
 CarTracker/node_modules/
 CarTracker/dist/
+.angular/
 
 CarTrackerBackend/node_modules/
 CarTrackerBackend/uploads/
@@ -8,6 +9,8 @@ CarTrackerBackend/uploads/
 # Ignore environment files
 CarTracker/.env
 CarTrackerBackend/.env
+
+
 
 # Ignore logs
 *.log
