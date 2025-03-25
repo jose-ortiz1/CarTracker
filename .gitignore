@@ -1,6 +1,7 @@
 # Ignore node_modules and build files
 CarTracker/node_modules/
 CarTracker/dist/
+CarTracker/.angular/
 
 CarTrackerBackend/node_modules/
 CarTrackerBackend/uploads/
