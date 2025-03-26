@@ -74,8 +74,6 @@ npm install
 ng serve
 ```
 
-> Make sure your MySQL server is running and configured in the `.env` file.
-
 
 ## 🙋‍♂️ Author
 
