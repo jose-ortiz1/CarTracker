@@ -35,7 +35,7 @@
           </td>
           <td>{{reminder.repeat_interval || 'One Time'}}</td>
           <td>
-            <!-- <button class="btn btn-success btn-sm"><i class="bi bi-check"></i>Done</button> -->
+            <button class="btn btn-success btn-sm" (click)="openCompleteModal(reminder)"><i class="bi bi-check"></i>Done</button>
             <button class="btn btn-warning btn-sm" (click)="editReminder(reminder)"><i class="bi bi-pencil"></i>Edit</button>
             <button class="btn btn-danger btn-sm" (click)="deleteReminder(reminder.reminder_id)"><i class="bi bi-trash"></i>Delete</button>
           </td>
@@ -86,4 +86,37 @@
       </div>
     </div>
   </div>
+
+
+  <!-- Complete Reminder Modal -->
+<div class="modal fade" id="completeReminderModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Complete Reminder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="fw-bold">Convert this reminder into a service record?</p>
+        
+        <div class="mb-3">
+          <label>Provider</label>
+          <input type="text" class="form-control" [(ngModel)]="completionData.provider">
+        </div>
+        <div class="mb-3">
+          <label>Cost ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="completionData.cost">
+        </div>
+        <div class="mb-3">
+          <label>Notes</label>
+          <textarea class="form-control" [(ngModel)]="completionData.notes"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" (click)="markReminderAsCompleted()">Mark as Done</button>
+      </div>
+    </div>
+  </div>
+</div>
 

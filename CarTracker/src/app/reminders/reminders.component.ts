@@ -20,6 +20,7 @@ export class RemindersComponent implements OnInit{
   modalInstance: any;
   currentMileage: any;
   availableServices: any[] = [];
+  reminderToComplete: any;
 
   reminderData = {
     vehicle_id: null,
@@ -30,6 +31,13 @@ export class RemindersComponent implements OnInit{
     repeat_interval: '',
     status: ''
   };
+
+  completionData = {
+    provider: '',
+    cost: null,
+    notes: ''
+  };
+
   
 
   constructor(private carTrackerService: CartrackerService, private router: Router) { }
@@ -57,7 +65,7 @@ export class RemindersComponent implements OnInit{
   fetchServiceTypes() {
     this.carTrackerService.getServiceTypes()
       .subscribe(types => {
-        this.availableServices = types; // Store fetched service types
+        this.availableServices = types; 
         console.log('Fetched service types:', this.availableServices);
       }, error => {
         console.error('Error fetching service types:', error);
@@ -101,7 +109,7 @@ export class RemindersComponent implements OnInit{
   }
 
   openReminderModal(reminder: any = null) {
-    this.selectedReminder = reminder ? { ...reminder } : null; // Ensure full copy is created
+    this.selectedReminder = reminder ? { ...reminder } : null; 
 
   this.reminderData = {
     vehicle_id: this.selectedVehicle.vehicle_id,
@@ -156,6 +164,70 @@ export class RemindersComponent implements OnInit{
     } else {
       return 'Upcoming';
     }
+  }
+
+  completeReminder(reminder: any) {
+    const confirmed = confirm(`Mark "${reminder.service_type}" as completed?`);
+    if (!confirmed) return;
+    const serviceEntry = {
+      vehicle_id: reminder.vehicle_id,
+      service_type_id: reminder.service_type_id,
+      service_date: new Date().toISOString().split('T')[0],
+      mileage: reminder.due_mileage,
+      provider: '', 
+      cost: 0,     
+      notes: 'Logged from Reminder',
+      receipt_url: null
+    };
+  
+    this.carTrackerService.addService(serviceEntry).subscribe(() => {
+      this.carTrackerService.deleteReminder(reminder.reminder_id).subscribe(() => {
+        alert('Reminder marked as done and moved to Service History');
+        this.fetchReminders(); // Refresh the view
+      });
+    });
+  }
+
+  openCompleteModal(reminder: any) {
+    this.reminderToComplete = reminder;
+    this.completionData = { provider: '', cost: null, notes: '' }; // Reset fields
+  
+    const modalEl = document.getElementById('completeReminderModal');
+    const modal = new bootstrap.Modal(modalEl!);
+    modal.show();
+  }
+
+  markReminderAsCompleted() {
+    if (!this.reminderToComplete) return;
+    
+    if (!this.completionData.provider || this.completionData.cost === null) {
+      alert('Please provide both provider name and cost.');
+      return;
+    }
+  
+    const serviceRecord = {
+      vehicle_id: this.selectedVehicle.vehicle_id,
+      service_type_id: this.reminderToComplete.service_type_id,
+      service_date: new Date().toISOString().split('T')[0], // today's date
+      mileage: this.selectedVehicle.mileage,
+      provider: this.completionData.provider,
+      cost: this.completionData.cost,
+      notes: this.completionData.notes,
+      receipt_url: null
+    };
+  
+    // 1. Save to service history
+    this.carTrackerService.addService(serviceRecord).subscribe(() => {
+      // 2. Delete the reminder
+      this.carTrackerService.deleteReminder(this.reminderToComplete.reminder_id).subscribe(() => {
+        this.fetchReminders(); // Refresh list
+      });
+    });
+  
+    // 3. Hide modal
+    const modalEl = document.getElementById('completeReminderModal');
+    const modal = bootstrap.Modal.getInstance(modalEl!);
+    modal?.hide();
   }
 
   // Convert MM/DD/YYYY to YYYY-MM-DD
