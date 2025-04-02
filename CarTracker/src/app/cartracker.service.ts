@@ -102,6 +102,11 @@ getRemindersByVehicle(vehicle_id: number): Observable<any> {
   return this.http.get(`${this.apiUrl}reminders/${vehicle_id}`);
 }
 
+// fetch reminder for notification
+getReminderNotifications(user_id: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}reminders/notifications/${user_id}`);
+}
+
 // Add a new reminder
 addReminder(reminder: any): Observable<any> {
   return this.http.post(`${this.apiUrl}reminders`, reminder);

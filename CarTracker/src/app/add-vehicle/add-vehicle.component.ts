@@ -74,7 +74,7 @@ export class AddVehicleComponent implements OnInit {
     formData.append('transmission', this.vehicle.transmission);
     formData.append('fuel_type', this.vehicle.fuel_type);
     formData.append('mileage', this.vehicle.mileage.toString());
-    formData.append('purchase_date', this.vehicle.purchase_date);
+    formData.append('purchase_date', this.vehicle.purchase_date || '');
     formData.append('nickname', this.vehicle.nickname);
 
     if (this.selectedFile) {

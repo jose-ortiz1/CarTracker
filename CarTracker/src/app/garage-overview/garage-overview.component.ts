@@ -19,6 +19,7 @@ export class GarageOverviewComponent implements OnInit {
   selectedVehicleId: any = null;
   currentUser: any = null;
   availableServices: any[] = [];
+  notificationList: any[] = [];
 
   constructor(private carTrackerService: CartrackerService) {}
 
@@ -27,6 +28,11 @@ export class GarageOverviewComponent implements OnInit {
     if (this.currentUser && this.currentUser.user_id) {
       this.fetchVehicles();
     }
+    this.fetchServiceTypes();
+
+    this.checkNotifications();
+
+    
   }
 
   fetchVehicles() {
@@ -87,6 +93,27 @@ export class GarageOverviewComponent implements OnInit {
   onVehicleChange() {
     this.fetchReminders();
     this.fetchServiceLogs();
+  }
+
+  checkNotifications() {
+    const user = this.carTrackerService.getCurrentUser();
+    this.carTrackerService.getReminderNotifications(user.user_id).subscribe(notifications => {
+      if (notifications.length > 0) {
+        this.notificationList = notifications;
+        //this.showNotification = true;
+      }
+    });
+  }
+  
+  dismissNotification(reminder: any) {
+    this.notificationList = this.notificationList.filter(r => r.reminder_id !== reminder.reminder_id);
+  }
+  
+  getRemainingDays(dueDate: string): number {
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    return diff;
   }
 
   

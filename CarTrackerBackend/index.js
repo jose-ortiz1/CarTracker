@@ -118,13 +118,14 @@ app.get('/api/vehicles/:user_id', async (req, res) => {
 app.post('/api/vehicles/', upload.single('photo'), async (req, res) => {
     const {user_id, vin_number, make, model, year, trim, engine, transmission, fuel_type, mileage, purchase_date, nickname  } = req.body;
     const photo_url = req.file ? req.file.filename : null;
+    const purchaseDateFormatted = purchase_date ? purchase_date : null;
 
     try{
         const [data] = await connection.promise().query(
             `INSERT INTO 
             car_tracker.vehicles (user_id, vin_number, make, model, year, trim, engine, transmission, fuel_type, mileage, purchase_date, photo_url, nickname) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [user_id, vin_number, make, model, year, trim, engine, transmission, fuel_type, mileage, purchase_date, photo_url, nickname]
+            [user_id, vin_number, make, model, year, trim, engine, transmission, fuel_type, mileage, purchaseDateFormatted, photo_url, nickname]
         );
         return res.json({ message: 'Vehicle added successfully', id: data.insertId });
 
@@ -296,6 +297,28 @@ app.get('/api/reminders', async (req, res) => {
         res.send('Error: ' + err);
     }
 })
+
+//GET REMINDERS BY USER TO NOTIFCATION
+
+app.get('/api/reminders/notifications/:user_id', async (req, res) => {
+    const user_id = req.params.user_id;
+
+    try {
+    const [data] = await connection.promise().query(`
+      SELECT r.*, st.service_type, st.icon_url, v.make, v.model, v.year
+      FROM car_tracker.reminders r
+      JOIN car_tracker.vehicles v ON r.vehicle_id = v.vehicle_id
+      JOIN car_tracker.service_types st ON r.service_type_id = st.service_type_id
+      WHERE v.user_id = ? AND r.due_date IS NOT NULL AND
+        DATEDIFF(r.due_date, CURDATE()) <= 30
+    `, [user_id]);
+
+    return res.json(data);
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ error: 'Failed to fetch reminder notifications' });
+  }
+});
 
 //Get all the reminders by vehicle
 app.get('/api/reminders/:vehicle_id', async (req, res) => {

@@ -5,14 +5,14 @@
           <div class="col">
               <!-- My Garage Section -->
               <div class="card shadow-sm p-4 mb-4 rounded color-sidebar">
-                  <h4 class="mb-3">My Garage</h4>
+                  <h4 class="mb-3 fw-bold">My Garage</h4>
                   <div class="d-flex justify-content-between align-items-center">
                       <div class="d-flex">
                           <div *ngFor="let vehicle of vehicles" class="vehicle-box text-center mx-2">
                               <img [src]="'http://localhost:3000/uploads/' + vehicle.photo_url" class="vehicle-img" alt="{{ vehicle.make }}">
                               <p>{{ vehicle.nickname || vehicle.make + ' ' + vehicle.model + ' ' + vehicle.year }}</p>
                           </div>
-                          <button class="btn btn-primary ms-3" [routerLink]="['/add-vehicle']">
+                          <button class="btn btn-primary ms-3" [routerLink]="['/add-vehicle']" id="addVehicle">
                               <i class="bi bi-plus-circle"></i> + Add New Vehicle
                           </button>
                       </div>
@@ -51,7 +51,7 @@
               <!-- Recent Service Logs Section -->
               <div class="card shadow-sm p-4 mb-4 rounded color-sidebar">
                   <div class="d-flex justify-content-between">
-                      <h4>Recent Service Logs</h4>
+                      <h4 class="fw-bold">Recent Service Logs</h4>
                       <select class="form-select w-auto" [(ngModel)]="selectedVehicleId" (change)="fetchServiceLogs()">
                           <option *ngFor="let vehicle of vehicles" [value]="vehicle.vehicle_id">
                               {{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }}
@@ -86,6 +86,22 @@
       </div>
   </div>
 </div>
+
+<!-- Toast Notification -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+    <div *ngFor="let notification of notificationList" class="toast show bg-warning text-dark" role="alert">
+      <div class="toast-header">
+        <img [src]="notification.icon_url" class="rounded me-2" style="width: 20px;" />
+        <strong class="me-auto">{{ notification.service_type }}</strong>
+        <small class="text-muted">Reminder</small>
+        <button type="button" class="btn-close ms-2 mb-1" (click)="dismissNotification(notification)"></button>
+      </div>
+      <div class="toast-body">
+        <p class="mb-1 fw-semibold">{{ notification.make }} {{ notification.model }} {{ notification.year }}</p>
+        <p class="mb-0">Due in {{ getRemainingDays(notification.due_date) }} days ({{ notification.due_date | date:'MMM d, y' }})</p>
+      </div>
+    </div>
+  </div>
 
 
 

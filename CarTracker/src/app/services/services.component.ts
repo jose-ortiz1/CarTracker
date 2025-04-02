@@ -106,7 +106,7 @@ export class ServicesComponent implements OnInit{
       this.serviceData = {
         vehicle_id: this.selectedVehicle.vehicle_id,
         service_type_id: null,
-        service_date: this.formatDate(service.service_date),
+        service_date: this.formatDate(service?.service_date) || '',
         mileage: null,
         provider: '',
         cost: null,
