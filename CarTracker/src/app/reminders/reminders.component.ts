@@ -65,7 +65,7 @@ export class RemindersComponent implements OnInit{
   fetchServiceTypes() {
     this.carTrackerService.getServiceTypes()
       .subscribe(types => {
-        this.availableServices = types; // Store fetched service types
+        this.availableServices = types; 
         console.log('Fetched service types:', this.availableServices);
       }, error => {
         console.error('Error fetching service types:', error);
@@ -109,7 +109,7 @@ export class RemindersComponent implements OnInit{
   }
 
   openReminderModal(reminder: any = null) {
-    this.selectedReminder = reminder ? { ...reminder } : null; // Ensure full copy is created
+    this.selectedReminder = reminder ? { ...reminder } : null; 
 
   this.reminderData = {
     vehicle_id: this.selectedVehicle.vehicle_id,
@@ -169,21 +169,18 @@ export class RemindersComponent implements OnInit{
   completeReminder(reminder: any) {
     const confirmed = confirm(`Mark "${reminder.service_type}" as completed?`);
     if (!confirmed) return;
-  
-    // 1. Add it to the service history
     const serviceEntry = {
       vehicle_id: reminder.vehicle_id,
       service_type_id: reminder.service_type_id,
       service_date: new Date().toISOString().split('T')[0],
       mileage: reminder.due_mileage,
-      provider: '', // You could ask the user via a modal
-      cost: 0,      // Optional
+      provider: '', 
+      cost: 0,     
       notes: 'Logged from Reminder',
       receipt_url: null
     };
   
     this.carTrackerService.addService(serviceEntry).subscribe(() => {
-      // 2. Delete the reminder
       this.carTrackerService.deleteReminder(reminder.reminder_id).subscribe(() => {
         alert('Reminder marked as done and moved to Service History');
         this.fetchReminders(); // Refresh the view
